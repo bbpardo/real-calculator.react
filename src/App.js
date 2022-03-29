@@ -16,10 +16,10 @@ function App() {
     setFirstNumber(firstNumber + event.target.value)
   }
 
-  function changeOperationHandler (func) {
+  function changeOperationHandler (ev) {
     temp.current = 0;
     firstNumberRef.current =  parseFloat(firstNumber);
-    operator.current = func;
+    operator.current = ev;
     setFirstNumber("");
     
   }
@@ -51,10 +51,11 @@ function App() {
     <main className='calculator'>
       <input className='textbox' placeholder="0" type="number" id="lname" value={firstNumber} name="lname" disabled></input>
       <div className='buttons'>
-        <button className='number-button1' type="sumit" onClick= {()=>changeOperationHandler((a,b)=>a+b)} value="suma">+</button>
-        <button className='number-button1' type="sumit" onClick= {()=>changeOperationHandler((a,b)=>a-b)} value="resta">-</button>
-        <button className='number-button1' type="sumit" onClick= {()=>changeOperationHandler((a,b)=>a*b)} value="multi">x</button>
-        <button className='number-button1' type="sumit" onClick= {()=>changeOperationHandler((a,b)=>a/b)} value="dividir">÷</button>
+        <button className='number-button1' type="sumit" onClick= {()=>changeOperationHandler((a,b)=>a+b)}>+</button>
+        <button className='number-button1' type="sumit" onClick= {()=>changeOperationHandler((a,b)=>a-b)}>-</button>
+        <button className='number-button1' type="sumit" onClick= {()=>changeOperationHandler((a,b)=>a*b)}>x</button>
+        <button className='number-button1' type="sumit" onClick= {()=>changeOperationHandler((a,b)=>a/b)}>÷</button>
+        <button className='number-button1' type="sumit" onClick= {()=>changeOperationHandler((a,b)=>(a*b)/100)}>%</button>
         <button className='number-button1' type="sumit" onClick= {resultMemory}>M</button>
         <button className='number-button1' type="sumit" onClick= {restoreResult}>MR</button>
         <button className='number-button1' type="sumit" onClick= {clearNumberHandler}>C</button>

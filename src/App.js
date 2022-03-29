@@ -7,7 +7,7 @@ function App() {
   const firstNumberRef = useRef("")
   const secondNumberRef = useRef("")
   const resultRef = useRef("")
-  const resultTemp = useRef("")
+  const resultTemp = useRef(0)
   const operator = useRef("")
   const temp = useRef(0);
 
@@ -16,35 +16,22 @@ function App() {
     setFirstNumber(firstNumber + event.target.value)
   }
 
-  function changeOperationHandler (event) {
+  function changeOperationHandler (func) {
     temp.current = 0;
     firstNumberRef.current =  parseFloat(firstNumber);
-    operator.current = event.target.value;
-    setFirstNumber("");  
+    operator.current = func;
+    setFirstNumber("");
+    
   }
-
-
   function resultado(){
     if (temp.current === 0){
       temp.current = 1;
       secondNumberRef.current = parseFloat(firstNumber);
     }
-    if(operator.current==="suma"){
-        resultRef.current = firstNumberRef.current + secondNumberRef.current;
-    }
-    if(operator.current==="resta"){
-      resultRef.current = firstNumberRef.current - secondNumberRef.current; 
-    }
-    if(operator.current==="multi"){
-      resultRef.current = firstNumberRef.current * secondNumberRef.current; 
-    }
-    if(operator.current==="dividir"){
-      resultRef.current = parseFloat(firstNumberRef.current / secondNumberRef.current);
-    }
-    else {
-      setFirstNumber(resultRef.current);
-      firstNumberRef.current = parseFloat(resultRef.current)
-    }
+    resultRef.current = operator.current(firstNumberRef.current, secondNumberRef.current);
+    setFirstNumber(resultRef.current)
+    firstNumberRef.current = parseFloat(resultRef.current)
+    
   }
 
   function clearNumberHandler() {
@@ -64,10 +51,10 @@ function App() {
     <main className='calculator'>
       <input className='textbox' placeholder="0" type="number" id="lname" value={firstNumber} name="lname" disabled></input>
       <div className='buttons'>
-        <button className='number-button1' type="sumit" onClick= {changeOperationHandler} value="suma">+</button>
-        <button className='number-button1' type="sumit" onClick= {changeOperationHandler} value="resta">-</button>
-        <button className='number-button1' type="sumit" onClick= {changeOperationHandler} value="multi">x</button>
-        <button className='number-button1' type="sumit" onClick= {changeOperationHandler} value="dividir">÷</button>
+        <button className='number-button1' type="sumit" onClick= {()=>changeOperationHandler((a,b)=>a+b)} value="suma">+</button>
+        <button className='number-button1' type="sumit" onClick= {()=>changeOperationHandler((a,b)=>a-b)} value="resta">-</button>
+        <button className='number-button1' type="sumit" onClick= {()=>changeOperationHandler((a,b)=>a*b)} value="multi">x</button>
+        <button className='number-button1' type="sumit" onClick= {()=>changeOperationHandler((a,b)=>a/b)} value="dividir">÷</button>
         <button className='number-button1' type="sumit" onClick= {resultMemory}>M</button>
         <button className='number-button1' type="sumit" onClick= {restoreResult}>MR</button>
         <button className='number-button1' type="sumit" onClick= {clearNumberHandler}>C</button>

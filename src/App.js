@@ -14,6 +14,7 @@ function App() {
   function pushNumber(event){
     setInputNumber(inputNumber + event.target.value)
   }
+  
 /**
  * Una función para almacenar la operacion a realizar y el numero que haya escrito en el display
  * @param {function} ev 
@@ -23,7 +24,6 @@ function App() {
     firstNumberRef.current =  parseFloat(inputNumber);
     operator.current = ev;
     setInputNumber("");
-    
   }
 
   /**
@@ -37,7 +37,6 @@ function App() {
     resultRef.current = operator.current(firstNumberRef.current, secondNumberRef.current);
     setInputNumber(resultRef.current)
     firstNumberRef.current = parseFloat(resultRef.current)
-    
   }
   
   function clearNumberHandler() {

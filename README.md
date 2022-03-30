@@ -1,70 +1,125 @@
-# Getting Started with Create React App
+# Documentacion de la calculadora
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+El proyecto de la calculado consiste en un formato simple creado desde la herramienta React con el fin de profundizar en su uso y mejorar a nivel personal.
 
-## Available Scripts
+El cuerpo del documento consistira en:
 
-In the project directory, you can run:
+- Un display
+- Botones de operaciones
+- Botones del 0 al 9
 
-### `npm start`
+Lo primero que se ha creado en un conjunto de states y ref para el funcionamiento de la calculado
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Lo necesario para mostrar numero en el display y usarlos
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```js
+const [inputNumber, setInputNumber] = useState("");
+```
 
-### `npm test`
+Un serie de ref para guardo los numeros que necesitomas almacenar:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```js
+const firstNumberRef = useRef("");
+const secondNumberRef = useRef("");
+const resultRef = useRef("");
+const resultTemp = useRef(0);
+```
 
-### `npm run build`
+Otros ref para variar el determinara el funcionamiento
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+>const operator = useRef("");
+>const temp = useRef(0);
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Una vez creadas, el siguiente paso fue crear un componente para los botos del 0 al 9 e insertarla en return del App.js
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```js
+function NumberButtons(props) {
+	const numbers = [7, 8, 9, 4, 5, 6, 1, 2, 3, ".", 0];
+	const buttons = numbers.map((item, idx) => (
+		<button
+			key={idx}
+			className="number-button"
+			type="sumit"
+			onClick={props.push}
+			value={item}
+		>
+			{item}
+		</button>
+	));
+	return <>{buttons}</>;
+}
+export default NumberButtons;
+```
 
-### `npm run eject`
+El siguiente paso despues fue empezar con las funciones, tales como:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- Una función para insertar los numeros en el display
+  ```js
+  function pushNumber(event) {
+  	setFirstNumber(firstNumber + event.target.value);
+  }
+  ```
+- Una función para almacenar la operacion a realizar y el numero que haya escrito en el display
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+  ```html
+  #HTML(ejemplo de ejecucion)
+  <button className='number-button1' type="sumit" onClick= {()=>changeOperationHandler((a,b)=>a+b)}>+</button>
+  ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+  ```js
+  #JS
+  function changeOperationHandler(ev) {
+    temp.current = 0;
+    firstNumberRef.current =  parseFloat(firstNumber);
+    operator.current = ev;
+    setFirstNumber("");
+  }
+  ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- Una función para ejecutar la operacion y mostrar el resultado en el display.
 
-## Learn More
+  ```js
+  function resultado() {
+  	if (temp.current === 0) {
+  		temp.current = 1;
+  		secondNumberRef.current = parseFloat(firstNumber);
+  	}
+  	resultRef.current = operator.current(
+  		firstNumberRef.current,
+  		secondNumberRef.current
+  	);
+  	setFirstNumber(resultRef.current);
+  	firstNumberRef.current = parseFloat(resultRef.current);
+  }
+  ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Dos funciones con la finalidad de borrar el contenido el display solo o borrar dicho display y el resultado almacenado.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+  ````js
+  function clearNumberHandler() {
+      temp.current = 0;
+      setFirstNumber("");
+  }
 
-### Code Splitting
+  function clearAllNumberHandler() {
+      temp.current = 0;
+      setFirstNumber("");
+      resultRef.current = "";
+  ```
+  ````
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- Dos ultimas funciones que sirven para guarda un resultado en un ref y poder volver a recuperarlos en el display
 
-### Analyzing the Bundle Size
+  ```js
+  function resultMemory() {
+  	resultTemp.current = parseFloat(resultRef.current);
+  }
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+  function restoreResult() {
+  	setFirstNumber(resultTemp.current);
+  }
+  ```
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+  Muchas gracias por su tiempo,espero que sea de su agrado.

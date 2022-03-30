@@ -3,7 +3,7 @@ import './App.css';
 import NumberButtons from './components/buttons/NumbersButtons';
 
 function App() {
-  const [ firstNumber, setFirstNumber ] = useState("");
+  const [ inputNumber, setInputNumber ] = useState("");
   const firstNumberRef = useRef("")
   const secondNumberRef = useRef("")
   const resultRef = useRef("")
@@ -11,45 +11,56 @@ function App() {
   const operator = useRef("")
   const temp = useRef(0);
 
-
   function pushNumber(event){
-    setFirstNumber(firstNumber + event.target.value)
+    setInputNumber(inputNumber + event.target.value)
   }
-
-  function changeOperationHandler (ev) {
+/**
+ * Una función para almacenar la operacion a realizar y el numero que haya escrito en el display
+ * @param {function} ev 
+ */
+  function changeOperationHandler(ev) {
     temp.current = 0;
-    firstNumberRef.current =  parseFloat(firstNumber);
+    firstNumberRef.current =  parseFloat(inputNumber);
     operator.current = ev;
-    setFirstNumber("");
+    setInputNumber("");
     
   }
-  function resultado(){
+
+  /**
+   * Una función para ejecutar la operacion y mostrar el resultado en el display.
+   */
+  function resultado() {
     if (temp.current === 0){
       temp.current = 1;
-      secondNumberRef.current = parseFloat(firstNumber);
+      secondNumberRef.current = parseFloat(inputNumber);
     }
     resultRef.current = operator.current(firstNumberRef.current, secondNumberRef.current);
-    setFirstNumber(resultRef.current)
+    setInputNumber(resultRef.current)
     firstNumberRef.current = parseFloat(resultRef.current)
     
   }
-
+  
   function clearNumberHandler() {
+    setInputNumber("");
+  }
+
+  function clearAllNumberHandler() {
     temp.current = 0;
-    setFirstNumber("");
+    setInputNumber("");
     resultRef.current = "";
   }
+
   function resultMemory(){
     resultTemp.current = parseFloat(resultRef.current);
   }
 
   function restoreResult() {
-    setFirstNumber(resultTemp.current)
+    setInputNumber(resultTemp.current)
   }
   
   return (
     <main className='calculator'>
-      <input className='textbox' placeholder="0" type="number" id="lname" value={firstNumber} name="lname" disabled></input>
+      <input className='textbox' placeholder="0" type="number" id="lname" value={inputNumber} name="lname" disabled></input>
       <div className='buttons'>
         <button className='number-button1' type="sumit" onClick= {()=>changeOperationHandler((a,b)=>a+b)}>+</button>
         <button className='number-button1' type="sumit" onClick= {()=>changeOperationHandler((a,b)=>a-b)}>-</button>
@@ -59,6 +70,7 @@ function App() {
         <button className='number-button1' type="sumit" onClick= {resultMemory}>M</button>
         <button className='number-button1' type="sumit" onClick= {restoreResult}>MR</button>
         <button className='number-button1' type="sumit" onClick= {clearNumberHandler}>C</button>
+        <button className='number-button1' type="sumit" onClick= {clearAllNumberHandler}>CA</button>
       </div>
       <div className='buttons'>
         <NumberButtons push= {pushNumber}/>
